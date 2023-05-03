@@ -21,11 +21,13 @@ const server = http.createServer((req,res) => {
         req.on("end",()=>{
             const parsedBody =  Buffer.concat(body).toString();
             const message = parsedBody.split('=')[1];
-            fs.writeFileSync("New File",message); //blocking code
+            fs.writeFileSync("New File",message , (err)=> {
+                //non-blocking code
+                res.statusCode = 302;
+                res.setHeader("Location","/");
+                return res.end();
+            }); 
         })
-        res.statusCode = 302;
-        res.setHeader("Location","/");
-        return res.end();
     }
     res.setHeader("content-type","text/html");
     res.write("<html>");
