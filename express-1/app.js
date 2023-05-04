@@ -1,22 +1,17 @@
 //nodemon detects the changes in the directory and refreshes the server
-const http = require('http')
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 
 const app = express();
+const adminRoutes = require('./routes/admin')
+const courseRoutes = require('./routes/course')
 app.use(bodyParser.urlencoded({extended:false}))
-
-app.use("/chill",(req,res,next) => {
-    res.send('<form action="/course" method="POST"><input type="text" name="title"><button type="submit">Submit</button></form>')
-})
-
-app.use("/course",(req,res,next) => {
-    console.log(req.body);
-    res.redirect("/")
-})
-
-app.use("/",(req,res,next) => {
-    res.send('<h1>Gandu</h1>')
+app.use(express.static(path.join(__dirname,"public")))
+app.use("/admin",adminRoutes);
+app.use(courseRoutes);
+app.use((req,res,next) => {
+    res.status(404).sendFile(path.join(__dirname,"files","error.html"));
 })
 
 app.listen(3000)
