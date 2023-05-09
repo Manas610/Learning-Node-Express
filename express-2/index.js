@@ -13,40 +13,57 @@ server.use(express.static("public"));
 
 server.use(morgan('default'))
 
-// server.use((req, res, next) => {
-//   console.log(req.get("User-Agent"), req.hostname, req.method, req.ip);
-//   next();
-// });
-
-const auth = (req, res, next) => {
-  // console.log(req.query);
-  if (req.body.password === "321") {
-    next();
-  } else {
-    res.sendStatus(401);
-  }
-};
-
-//server.use(auth);
 
 // API - Endpoint - Route
+//products
 
-server.get("/product/:id", auth, (req, res) => {
-  console.log(req.params)
-  res.json({ type: "GET" });
+// CREATE POST /products     C R U D
+server.post("/products", (req, res) => {
+  console.log(req.body)
+  products.push(req.body)
+  res.json(req.body.id);
 });
-server.post("/", auth, (req, res) => {
-  res.json({ type: "POST" });
+
+// READ GET /product
+server.get("/products", (req, res) => {
+  res.json(products);
 });
-server.put("/", (req, res) => {
-  res.json({ type: "PUT" });
+
+// READ GET /product/:id
+server.get("/products/:id", (req, res) => {
+  const id = +req.params.id;
+  const product = products.find(p=>p.id===id)
+  res.json(product);
 });
-server.delete("/", (req, res) => {
-  res.json({ type: "DELETE" });
+
+
+// UPDATE PUT /product/:id
+server.put("/products/:id", (req, res) => {
+  const id = +req.params.id;
+  const productIndex = products.findIndex(p=>p.id===id)
+  products.splice(productIndex,1,{...req.body, id:id})
+  res.status(201).json();
 });
-server.patch("/", (req, res) => {
-  res.json({ type: "PATCH" });
+
+// UPDATE PATCH /product/:id
+server.patch("/products/:id", (req, res) => {
+  const id = +req.params.id;
+  const productIndex = products.findIndex(p=>p.id===id)
+  const product = products[productIndex]
+  products.splice(productIndex,1,{...product,...req.body})
+  res.status(201).json();
 });
+
+// DELETE DELETE /product/:id
+server.delete("/products/:id", (req, res) => {
+  const id = +req.params.id;
+  const productIndex = products.findIndex(p=>p.id===id)
+  const product = products[productIndex]
+  products.splice(productIndex,1)
+  res.status(201).json(product);
+});
+
+
 
 server.get("/demo", (req, res) => {
   // res.sendStatus(404);
