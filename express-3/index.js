@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express");
 const server = express();
 const productRouter = express.Router()
@@ -7,6 +8,8 @@ server.use(express.static("public"));
 server.use('/',productRouter)
 
 const productController = require('./controller/Product')
+
+console.log('env',process.env.DB_PASSWORD)
 
 // CREATE POST /products     C R U D
 productRouter
