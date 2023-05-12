@@ -4,7 +4,7 @@ const server = express();
 const productRouter = express.Router()
 
 server.use(express.json());
-server.use(express.static("public"));
+server.use(express.static(process.env.PUBLIC_DIR));
 server.use('/',productRouter)
 
 const productController = require('./controller/Product')
@@ -25,6 +25,6 @@ productRouter
 // DELETE DELETE /product/:id
 .delete("/products/:id", productController.deleteProduct)
 
-server.listen(8080, () => {
+server.listen(process.env.PORT, () => {
   console.log("server started");
 });
