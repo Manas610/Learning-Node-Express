@@ -10,6 +10,7 @@ const productController = require('../controller/Product')
 router
 .post("/", productController.createProduct)
 // READ GET /product
+.get("/ssr", productController.getAllProductsSSR)
 .get("/", productController.getAllProducts)
 // READ GET /product/:id
 .get("/:id", productController.getProduct)
@@ -19,5 +20,6 @@ router
 .patch("/:id", productController.updateProduct)
 // DELETE DELETE /product/:id
 .delete("/:id", productController.deleteProduct)
+
 
 exports.router = router;
